@@ -2,6 +2,9 @@ use std::hash::{Hash, Hasher};
 use std::path::Display;
 use std::fmt;
 use serde::export::Formatter;
+use std::num::ParseIntError;
+
+const MAX_TIER: i32 = 1;
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct Piece {
@@ -110,7 +113,7 @@ impl Board {
                                             moves.push(Action { from, to });
                                         },
                                         Some(target) => {
-                                            if target.team == piece.team && target.tier == piece.tier {
+                                            if target.team == piece.team && target.tier == piece.tier && piece.tier < MAX_TIER {
                                                 // Merge
                                                 moves.push(Action { from, to });
                                             } else if target.team != piece.team && target.tier <= piece.tier {
@@ -189,6 +192,17 @@ impl PartialEq for Board {
 pub struct Action {
     pub from: usize,
     pub to: usize,
+}
+
+impl Action {
+    pub fn from(action: &str) -> Result<Action, ParseIntError> {
+        let parts: Vec<&str> = action.split(' ').collect();
+        Ok(Action { from: parts[0].parse()?, to: parts[1].parse()? })
+    }
+
+    pub fn to_string(self) -> String {
+        format!("{} {}", self.from, self.to)
+    }
 }
 
 pub enum BoardError {

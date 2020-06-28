@@ -19,7 +19,7 @@ pub enum Message {
 pub struct StartMsg {
     pub message_type: String,
     pub message: String,
-    pub your_side: i64,
+    pub your_side: i32,
     pub your_turn: bool,
     pub full_board: String,
 }
@@ -45,13 +45,6 @@ pub struct EndMsg {
     pub message_type: String,
     pub message: String,
     pub move_played: String,
-    pub winner: i64,
+    pub winner: i32,
     pub full_board: String,
-}
-
-fn receive(stream: &TcpStream) -> Result<Message> {
-    let mut msg = String::new();
-    BufReader::new(stream).read_line(&mut msg)?;
-    // println!("{}", msg.as_str());
-    Ok(serde_json::from_str::<Message>(msg.as_str())?)
 }

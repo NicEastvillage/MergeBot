@@ -1,3 +1,4 @@
+mod player;
 mod messages;
 
 use crate::bot::Bot;
