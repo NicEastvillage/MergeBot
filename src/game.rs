@@ -103,7 +103,7 @@ impl Board {
                                 if only_capturing {
                                     // At least one capturing is possible, so we only consider capturing now
                                     if let Some(enemy) = dest {
-                                        if enemy.team != piece.team && enemy.tier <= piece.team {
+                                        if enemy.team != piece.team && enemy.tier <= piece.tier {
                                             moves.push(Action { from, to });
                                             break;
                                         }
@@ -187,23 +187,6 @@ impl PartialEq for Board {
         }
         return true;
     }
-}
-
-pub fn perft(board: &mut Board, depth: i32) -> i32 {
-    if depth == 0 {
-        return 1;
-    }
-
-    let mut total = 0;
-    let actions = board.find_all_actions();
-
-    for action in &actions {
-        let mut new_board = board.clone();
-        new_board.perform(action);
-        total += perft(&mut new_board, depth - 1);
-    }
-
-    return total;
 }
 
 #[derive(Eq, PartialEq, Hash, Copy, Clone, Debug)]
