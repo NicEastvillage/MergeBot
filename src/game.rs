@@ -22,6 +22,7 @@ fn piece(team: i32) -> Option<Piece> {
     return Some(Piece { team, tier: 0 })
 }
 
+#[derive(Clone)]
 pub struct Board {
     pub turn: i32,
     pub grid: [Option<Piece>; 64],
@@ -44,7 +45,7 @@ impl Board {
         };
     }
 
-    /// Does not move length and direction correctness of the action
+    /// Does not check length and direction correctness of the action
     pub fn perform(&mut self, action: &Action) -> Result<(), BoardError> {
         if !Board::index_in_bounds(action.from) || !Board::index_in_bounds(action.to) {
             return Err(BoardError::OutOfBounds);
@@ -79,7 +80,7 @@ impl Board {
         Ok(())
     }
 
-    pub fn find_all_moves(&self) -> Vec<Action> {
+    pub fn find_all_actions(&self) -> Vec<Action> {
         let mut moves: Vec<Action> = vec![];
         let mut only_capturing = false;
 
@@ -92,8 +93,8 @@ impl Board {
 
                     let move_len = piece.move_len();
 
-                    for (dx, dy) in [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, -1)].iter() {
-                        for m in 0..move_len {
+                    for (dx, dy) in [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)].iter() {
+                        for m in 1..move_len + 1 {
                             let tx = x + dx * m;
                             let ty = y + dy * m;
                             if Board::pos_in_bounds(tx, ty) {
@@ -186,6 +187,23 @@ impl PartialEq for Board {
         }
         return true;
     }
+}
+
+pub fn perft(board: &mut Board, depth: i32) -> i32 {
+    if depth == 0 {
+        return 1;
+    }
+
+    let mut total = 0;
+    let actions = board.find_all_actions();
+
+    for action in &actions {
+        let mut new_board = board.clone();
+        new_board.perform(action);
+        total += perft(&mut new_board, depth - 1);
+    }
+
+    return total;
 }
 
 #[derive(Eq, PartialEq, Hash, Copy, Clone, Debug)]
