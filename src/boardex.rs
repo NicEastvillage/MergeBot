@@ -29,7 +29,7 @@ impl BoardExplorer {
         let undo = self.undo_stack.pop().expect("Undo stack is empty.");
         self.board.grid[undo.from] = undo.from_piece;
         self.board.grid[undo.to] = undo.to_piece;
-        self.board.turn = 1 - self.board.turn;
+        self.board.current_player = 1 - self.board.current_player;
     }
 }
 

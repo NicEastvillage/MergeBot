@@ -1,11 +1,14 @@
+mod human;
 mod boardex;
 mod player;
 mod messages;
 
 use crate::bot::Bot;
-use crate::game::Board;
+use crate::game::{Board, Action};
+use crate::human::Human;
 use std::time::Instant;
 use crate::boardex::{perft, BoardExplorer};
+use crate::player::{play_online, play_duel};
 
 mod bot;
 mod game;
@@ -13,9 +16,5 @@ mod game;
 fn main() {
     println!("Hello, world!");
 
-    for x in 1..6 {
-        let now = Instant::now();
-        let p = perft(&mut BoardExplorer::new(Board::new()), x);
-        println!("Perft {} = {} ({} ms)", x, p, (now.elapsed().as_micros() as f64) / 1000f64);
-    }
+    play_duel(Bot::new(Board::new()), Bot::new(Board::new()), true);
 }
