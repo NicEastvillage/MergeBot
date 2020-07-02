@@ -2,7 +2,7 @@ use crate::game::{Board, Piece, Action};
 use std::hint::unreachable_unchecked;
 
 pub struct BoardExplorer {
-    board: Board,
+    pub board: Board,
     undo_stack: Vec<UndoAction>,
 }
 
@@ -30,6 +30,7 @@ impl BoardExplorer {
         self.board.grid[undo.from] = undo.from_piece;
         self.board.grid[undo.to] = undo.to_piece;
         self.board.current_player = 1 - self.board.current_player;
+        self.board.turn -= 1;
     }
 }
 

@@ -6,12 +6,12 @@ use std::num::ParseIntError;
 use crate::game::Status::HitTurnLimit;
 
 const MAX_TIER: i32 = 1;
-const MAX_TURN: i32 = 30;
+const MAX_TURN: i32 = 300;
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct Piece {
-    team: i32,
-    tier: i32,
+    pub team: i32,
+    pub tier: i32,
 }
 
 impl Piece {
