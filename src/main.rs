@@ -16,5 +16,5 @@ mod game;
 fn main() {
     println!("Hello, world!");
 
-    play_duel(Bot::new(Board::new()), Bot::new(Board::new()), true);
+    play_duel(Bot::new(), Bot::new(), true);
 }

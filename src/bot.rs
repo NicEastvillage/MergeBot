@@ -11,9 +11,9 @@ pub struct Bot {
 }
 
 impl Bot {
-    pub fn new(board: Board) -> Bot {
+    pub fn new() -> Bot {
         return Bot {
-            board
+            board: Board::new()
         }
     }
 }
@@ -95,16 +95,16 @@ fn heuristic(board: &Board) -> i32 {
             for piece in board.grid.iter() {
                 if let Some(Piece { team, tier }) = piece {
                     let color = 1 - *team * 2;
-                    value += (3 + 3 * tier) * color;
+                    value += (3 + 4 * tier) * color;
                 }
             }
             value
         },
         Status::Won { winner } => {
             if winner == 0 {
-                999999
+                9999999
             } else {
-                -999999
+                -9999999
             }
         },
         Status::HitTurnLimit => 0,
